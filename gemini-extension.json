@@ -1,0 +1,14 @@
+{
+  "name": "knot",
+  "version": "1.0.0",
+  "description": "Shared context and v1->v2 context governance across Gemini, ChatGPT, Claude, and Cursor over MCP.",
+  "contextFileName": "GEMINI.md",
+  "mcpServers": {
+    "knot": {
+      "httpUrl": "https://api.connectknot.com/mcp",
+      "oauth": {
+        "enabled": true
+      }
+    }
+  }
+}

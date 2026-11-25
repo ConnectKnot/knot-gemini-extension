@@ -1,0 +1,14 @@
+description = "Check pending cross-AI handoffs or dispatch a scoped handoff to another AI tool via Knot."
+prompt = """
+Manage cross-AI task handoffs through Knot so context transfers cleanly across Gemini, Claude, ChatGPT, Cursor, and Antigravity.
+
+Handoff request or filter (may be empty): {{args}}
+
+Follow these steps:
+1. If `{{args}}` is empty or asks to review incoming tasks, call `check_pending_handoffs` and list each waiting handoff with its source, goal, and current status. When the user accepts, completes, or declines one, report status via `update_handoff_status` with a short `resolution_summary`.
+2. If `{{args}}` asks to pass work to another AI client (such as `claude`, `chatgpt`, `cursor`, or `antigravity`):
+   - Confirm no raw credentials, API keys, or PCI card data appear in the handoff text or payload.
+   - Call `get_relevant_context` to gather relevant active `context_refs` for the task.
+   - Call `create_handoff` with `destination_client_id`, a clear `task` description (goal, completed steps, remaining work), and `context_refs`.
+3. Report the resulting handoff state clearly in plain sentences.
+"""

@@ -1,0 +1,19 @@
+description = "Supersede an outdated v1 decision or constraint with a governed v2 claim in Knot."
+prompt = """
+Record a governed `v1 -> v2` decision or constraint update in Knot without leaving stale claims active.
+
+Requested change: {{args}}
+
+Follow these steps:
+1. Inspect `{{args}}` for any secrets, API keys, passwords, tokens, or credit card PAN/CVV numbers. Refuse to store raw credentials or PCI data (Knot blocks PCI payloads with `PCI_CDE_PAYLOAD_REJECTED` and high-entropy credentials).
+2. Call `get_relevant_context` (with `query_mode: "trajectory"` when available) for the topic in `{{args}}` to locate the active `v1` item ID or `updates_ref` anchor.
+3. If multiple overlapping items match or the replacement target is ambiguous, ask the user to clarify which claim is superseded before writing.
+4. Call `propose_context` with:
+   - `kind` (`"decision"`, `"constraint"`, `"fact"`, `"goal"`, or `"project_state"`)
+   - `entity_hint` (project or topic name)
+   - `statement` (one atomic `v2` rule)
+   - `rationale` (why `v2` replaces `v1`)
+   - `supersedes_context_id` (or `updates_ref` from `get_relevant_context`)
+   - `idempotency_key` (unique string for safe retries)
+5. Confirm the `v1 -> v2` update in plain language and warn if any `potential_conflicts` remain.
+"""

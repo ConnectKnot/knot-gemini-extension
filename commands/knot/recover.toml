@@ -1,0 +1,13 @@
+description = "Recover Turn-0 shared project context, active constraints, and pending cross-AI handoffs from Knot."
+prompt = """
+Recover the active Knot context for the user's current request or session before taking action.
+
+Target topic or scope hint (may be empty): {{args}}
+
+Follow these steps:
+1. If the user named a shared workspace or project, verify the active scope using `knot_list_scopes` (and switch with `knot_set_active_scope` if an exact match exists).
+2. Call `get_context_recovery` with `trigger: "user_request"` (and `query` or `entity_hint` derived from `{{args}}` when provided) to retrieve current state, recent changes, and any potential conflicts.
+3. If `{{args}}` identifies a specific topic or if you need `v1 -> v2` lineage details, also call `get_relevant_context` with `query_mode: "trajectory"`.
+4. Call `check_pending_handoffs` to surface any tasks sent to Gemini from ChatGPT, Claude, Cursor, or Antigravity.
+5. Summarize the active `v2` decisions, active constraints, potential conflicts, and pending handoffs in plain sentences without exposing raw internal UUIDs unless asked.
+"""
